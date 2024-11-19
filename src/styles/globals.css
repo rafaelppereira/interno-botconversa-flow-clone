@@ -74,3 +74,16 @@
       @apply bg-background text-foreground;
     }
   }
+
+  @keyframes dashAnimation {
+    from {
+      stroke-dashoffset: 0;
+    }
+    to {
+      stroke-dashoffset: -20; /* Altere para corresponder ao comprimento do strokeDasharray para um loop contínuo */
+    }
+  }
+  
+  .react-flow__connectionline {
+    animation: dashAnimation 1s linear infinite; /* Aplica a animação */
+  }
