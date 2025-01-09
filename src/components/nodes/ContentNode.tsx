@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Handle, NodeProps, Position, useReactFlow } from "reactflow";
 import { Star, ChevronRight, Trash, Pencil } from "lucide-react";
 import { useReactFlowContext } from "@/hooks/useReactFlowContext";
-import { updateQueryParams } from "@/lib/query-params";
+import { useSearchParams } from "react-router-dom";
 
 export function ContentNode(props: NodeProps) {
   const { removeNode } = useReactFlowContext();
   const { getNode, setCenter } = useReactFlow();
+
+  const [_, setSearchParams] = useSearchParams();
 
   return (
     <div
@@ -30,7 +33,7 @@ export function ContentNode(props: NodeProps) {
           duration: 500,
         });
       }}
-      className="border border-red-200 px-5 pt-4 pb-16 bg-red-50 rounded-xl max-w-xs group"
+      className={`${props.data.steps ? 'pb-4' : 'pb-16'} border border-red-200 px-5 pt-4 bg-red-50 rounded-xl max-w-xs group`}
     >
       <Handle
         id="left"
@@ -65,7 +68,28 @@ export function ContentNode(props: NodeProps) {
             <button
               type="button"
               onClick={() => {
-                updateQueryParams("nodeId", props.id);
+                setSearchParams((state) => {
+                  state.set("nodeId", props.id);
+                  return state;
+                });
+                const node = getNode(props.id) as
+                  | {
+                      position?: { x: number; y: number };
+                      height: number;
+                      width: number;
+                    }
+                  | undefined;
+                if (!node || !node.position) return;
+
+                const { position, height, width } = node;
+                const x = position.x + width! / 2;
+                const y = position.y + height! / 2;
+
+                if (!x || !y) return;
+                setCenter(x, y, {
+                  zoom: 2,
+                  duration: 500,
+                });
               }}
             >
               <Pencil className="size-4 text-zinc-700 hover:text-emerald-500 transition-all" />
@@ -78,6 +102,31 @@ export function ContentNode(props: NodeProps) {
         <p className="text-zinc-600 mt-2">
           Adicione um conteúdo para sua etapa. Assim personalize seu fluxo.
         </p>
+
+        {props.data.steps && (
+          <div>
+            {props.data.steps.map((step: any) => {
+              if (step.type === "text") {
+                return (
+                  <div className="bg-red-100 mt-3 rounded-md p-3 text-zinc-600">
+                    {step.content}
+                  </div>
+                );
+              }
+
+              if (step.type === "delay") {
+                return (
+                  <div className="bg-red-100 mt-3 rounded-md p-3 text-zinc-600">
+                    <h2 className="text-rose-500 text-sm">Atraso</h2>
+                    <p className="text-zinc-500 text-sm font-medium tracking-tight">
+                      Digitando {step.delayValue} segundos
+                    </p>
+                  </div>
+                );
+              }
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

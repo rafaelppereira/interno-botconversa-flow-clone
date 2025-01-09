@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AlignVerticalSpaceBetween, Rss, Star, Workflow } from "lucide-react";
+import { AlignVerticalSpaceBetween, List, Rss, Star, Workflow } from "lucide-react";
 import { Button } from "./ui/button";
 import { useReactFlow } from "reactflow";
 
@@ -168,12 +168,24 @@ export function Toolbar() {
         <button
           draggable
           type="button"
-          onDragStart={(event) => onDragStart(event, "integration")}
+          onDragStart={(event) => onDragStart(event, "menu")}
           className="mt-4 w-32 h-32 bg-purple-50/50 border border-purple-200 rounded hover:-translate-y-2 transition-all flex justify-center"
         >
           <span className="text-zinc-600 mt-2 inline-flex items-center">
             {" "}
-            <Rss className="size-3 mr-1 text-purple-500" /> Integração
+            <List className="size-3 mr-1 text-purple-500" /> Menu
+          </span>
+        </button>
+
+        <button
+          draggable
+          type="button"
+          onDragStart={(event) => onDragStart(event, "integration")}
+          className="mt-4 w-32 h-32 bg-pink-50/50 border border-pink-200 rounded hover:-translate-y-2 transition-all flex justify-center"
+        >
+          <span className="text-zinc-600 mt-2 inline-flex items-center">
+            {" "}
+            <Rss className="size-3 mr-1 text-pink-500" /> Integração
           </span>
         </button>
 

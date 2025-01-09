@@ -4,6 +4,7 @@ import { ConditionalNode } from "@/components/nodes/ConditionalNode";
 import { ContentNode } from "@/components/nodes/ContentNode";
 import { InitialNode } from "@/components/nodes/InitialNode";
 import { IntegrationNode } from "@/components/nodes/IntegrationNode";
+import { MenuNode } from "@/components/nodes/menu-node";
 import { ReactNode, createContext, useCallback } from "react";
 import { Connection, Node, NodeChange, addEdge, useEdgesState, useNodesState } from "reactflow";
 
@@ -23,8 +24,9 @@ export const INITIAL_NODES = [
 const NODE_TYPES = {
   initial: InitialNode,
   content: ContentNode,
+  menu: MenuNode,
   conditional: ConditionalNode,
-  integration: IntegrationNode
+  integration: IntegrationNode,
 };
 const EDGE_TYPES = {
   default: DefaultEdge,
@@ -71,7 +73,9 @@ export function ReactFlowProvider({ children }: ReactFlowProviderProps) {
 
   function removeNode(nodeId: string) {
     const updateNodeList = nodes.filter(node => node.id !== nodeId)
+    const updateEdgeList = edges.filter(edge => edge.target !== nodeId || edge.source !== nodeId)
     setNodes(updateNodeList);
+    setEdges(updateEdgeList)
   }
 
   function onNodesChangePosition(data: NodeChange[] | undefined) {

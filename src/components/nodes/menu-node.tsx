@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Handle, NodeProps, Position, useReactFlow } from "reactflow";
-import { ChevronRight, Trash, Rss, Pencil } from "lucide-react";
+import { ChevronRight, Trash, Pencil, List } from "lucide-react";
 import { useReactFlowContext } from "@/hooks/useReactFlowContext";
 import { useSearchParams } from "react-router-dom";
 
-export function IntegrationNode(props: NodeProps) {
+export function MenuNode(props: NodeProps) {
   const { removeNode } = useReactFlowContext();
   const { getNode, setCenter } = useReactFlow();
 
   const [_, setSearchParams] = useSearchParams();
-
 
   return (
     <div
@@ -34,13 +33,13 @@ export function IntegrationNode(props: NodeProps) {
           duration: 500,
         });
       }}
-      className="border border-purple-200 px-5 pt-4 pb-16 bg-purple-50 rounded-xl max-w-xs group"
+      className={`${props.data.menuOptions ? 'pb-4' : 'pb-16'} border border-purple-200 px-5 pt-4 bg-purple-50 rounded-xl max-w-xs group`}
     >
       <Handle
         id="left"
         type="target"
         position={Position.Left}
-        className="z-[999] size-6 bg-white text-purple-500 border border-purple-500 flex items-center justify-center p-0 hover:brightness-75 transition-all"
+        className="z-[999] size-6 bg-white text-blue-500 border border-blue-500 flex items-center justify-center p-0 hover:brightness-75 transition-all"
         style={{
           transform: "translate(-30%, -300%)",
         }}
@@ -63,7 +62,7 @@ export function IntegrationNode(props: NodeProps) {
       <div>
         <div className="flex items-center justify-between">
           <div className="text-zinc-800 font-semibold flex items-center text-lg">
-            <Rss className="text-purple-500 size-5 mr-2" /> Integração
+            <List className="text-purple-500 size-5 mr-2 fill-purple-500" /> Menu
           </div>
           <div className="opacity-0 group-hover:opacity-100 invisible group-hover:visible space-x-2 transition-all">
             <button
@@ -101,8 +100,18 @@ export function IntegrationNode(props: NodeProps) {
           </div>
         </div>
         <p className="text-zinc-600 mt-2">
-          Adicione uma integração para sua etapa. Assim personalize seu fluxo.
+          Adicione um menu para sua etapa. Assim personalize seu fluxo.
         </p>
+
+        {props.data.menuOptions && (
+          <div className="mt-3">
+            <h2 className="text-sm text-zinc-600">Texto da pergunta:</h2>
+            {props.data.menuOptions.questionMenu}
+
+            <h2 className="text-sm text-zinc-600 mt-3">Título do botão:</h2>
+            {props.data.menuOptions.titleMenu}
+          </div>
+        )}
       </div>
     </div>
   );

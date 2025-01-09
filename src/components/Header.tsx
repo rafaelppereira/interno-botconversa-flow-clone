@@ -1,5 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Loader2, RefreshCcw, Save, SquareDashedMousePointer } from "lucide-react";
+import {
+  Loader2,
+  RefreshCcw,
+  Save,
+  SquareDashedMousePointer,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { useReactFlow } from "reactflow";
 import { toast } from "sonner";
@@ -7,19 +12,17 @@ import { Badge } from "./ui/badge";
 import { useCallback, useEffect, useState } from "react";
 import { useReactFlowContext } from "@/hooks/useReactFlowContext";
 import { ClearFlowAlertDialog } from "./clear-flow-alert-dialog";
+import { PreviewFlowPopover } from "./preview-flow-popover";
 
 export function Header() {
-  const { nodes, edges } = useReactFlowContext()
+  const { nodes, edges } = useReactFlowContext();
   const { toObject } = useReactFlow();
   const [flowStatus, setFlowStatus] = useState("save");
-  const [savedFlow, setSavedFlow] = useState(
-    () =>
-      JSON.parse(
-        localStorage.getItem("@flowbuilder:workflowDefinition") || "{}"
-      )
+  const [savedFlow, setSavedFlow] = useState(() =>
+    JSON.parse(localStorage.getItem("@flowbuilder:workflowDefinition") || "{}")
   );
 
-  const [isLoadingStatus, setIsLoadingStatus] = useState(true)
+  const [isLoadingStatus, setIsLoadingStatus] = useState(true);
 
   const updateFlowStatus = useCallback(() => {
     const currentFlow = toObject();
@@ -31,12 +34,12 @@ export function Header() {
   useEffect(() => {
     updateFlowStatus();
   }, [nodes, edges]);
-  
+
   useEffect(() => {
     setTimeout(() => {
-      setIsLoadingStatus(false)
-    }, 500)
-  }, [])
+      setIsLoadingStatus(false);
+    }, 500);
+  }, []);
 
   const handleSave = () => {
     const workflowDefinition = toObject();
@@ -51,7 +54,7 @@ export function Header() {
 
   return (
     <header className="h-20 bg-zinc-50 border-b">
-      <div className="px-10 h-20 flex items-center justify-between">
+      <div className="px-4 h-20 flex items-center justify-between">
         <a href="/" className="text-2xl font-extrabold flex items-center gap-2">
           <div className="rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 p-2">
             <SquareDashedMousePointer size={20} className="stroke-white" />
@@ -73,6 +76,8 @@ export function Header() {
             <Badge className="bg-rose-500">Fluxo com alterações</Badge>
           )}
 
+          <PreviewFlowPopover />
+
           <Button
             type="button"
             size="icon"
@@ -83,7 +88,7 @@ export function Header() {
             <RefreshCcw className="size-4" />
           </Button>
 
-        <ClearFlowAlertDialog />
+          <ClearFlowAlertDialog />
 
           <Button
             variant={"outline"}
